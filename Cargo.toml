@@ -1,0 +1,13 @@
+[package]
+name = "mensa"
+version = "0.1.0"
+authors = ["Janosch Gräf <janosch.graef@cispa.saarland>"]
+
+[dependencies]
+reqwest = "0.9.2"
+serde = "1.0.79"
+serde_json = "1.0"
+serde_derive = "1.0.79"
+chrono = { version = "0.4.6", features = ["serde"] }
+clap = "2.32.0"
+colored = "1.6.1"
