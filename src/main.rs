@@ -93,12 +93,12 @@ fn main() {
         match client.get_menu(&location) {
             Ok(menu) => {
                 let day = if !tomorrow {menu.today()} else {menu.tomorrow()};
-                match menu.today() {
+                match day {
                     Some(day) => {
                         let p = Printer::new();
                         p.print_day(day);
                     },
-                    None => eprintln!("Menu didn't contain data for today")
+                    None => eprintln!("Menu didn't contain data for {}", if !tomorrow {"today"} else {"tomorrow"})
                 }
             },
             Err(e) => eprintln!("Could not retrieve mensa menu: {}", e)
