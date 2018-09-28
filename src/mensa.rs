@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, Utc, Duration};
 
 use reqwest;
 
@@ -182,14 +182,23 @@ pub struct Menu {
 }
 
 impl Menu {
-    pub fn today(&self) -> Option<&Day> {
-        let date = Utc::now().date().and_hms(0, 0, 0);
+    fn for_day(&self, date: DateTime<Utc>) -> Option<&Day> {
         for day in self.days.iter() {
             if day.date == date {
                 return Some(day);
             }
         }
         None
+    }
+
+    pub fn today(&self) -> Option<&Day> {
+        let date = Utc::now().date().and_hms(0, 0, 0);
+        self.for_day(date)
+    }
+
+    pub fn tomorrow(&self) -> Option<&Day> {
+        let date = Utc::now().date().and_hms(0, 0, 0);
+        self.for_day(date + Duration::days(1))
     }
 }
 

@@ -58,10 +58,15 @@ fn main() {
             .value_name("LANG")
             .help("Select language: en or de. Default: de")
             .takes_value(true))
+        .arg(Arg::with_name("tomorrow")
+            .short("t")
+            .long("tomorrow")
+            .help("Show meals for tomorrow"))
         .get_matches();
 
     let location = matches.value_of("location").unwrap_or("sb").to_string();
     let language = matches.value_of("language").unwrap_or("de").to_string();
+    let tomorrow = matches.is_present("tomorrow");
 
     let config = Config {
         language,
@@ -69,16 +74,34 @@ fn main() {
     };
     let client = Client::new(config);
 
-    match client.get_menu(&location) {
-        Ok(menu) => {
-            match menu.today() {
-                Some(day) => {
-                    let p = Printer::new();
-                    p.print_day(day);
-                },
-                None => eprintln!("Menu didn't contain data for today")
+    if location == "?" {
+        // print valid locations
+
+        match client.get_base_data() {
+            Ok(base_data) => {
+                println!("Valid locations are:");
+                for (id, location) in base_data.locations.iter() {
+                    println!("  * {}: {}", id, location.display_name);
+                }
             }
-        },
-        Err(e) => eprintln!("Could not retrieve mensa menu: {}", e)
+            Err(e) => eprintln!("Could not retrieve base data: {}", e)
+        }
+    }
+    else {
+        // print meals
+
+        match client.get_menu(&location) {
+            Ok(menu) => {
+                let day = if !tomorrow {menu.today()} else {menu.tomorrow()};
+                match menu.today() {
+                    Some(day) => {
+                        let p = Printer::new();
+                        p.print_day(day);
+                    },
+                    None => eprintln!("Menu didn't contain data for today")
+                }
+            },
+            Err(e) => eprintln!("Could not retrieve mensa menu: {}", e)
+        }
     }
 }
