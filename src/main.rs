@@ -18,28 +18,6 @@ use printer::Printer;
 use mensa::*;
 
 
-fn print_base_data(client: Client) {
-    println!("# Base Data");
-    println!();
-    println!("```");
-    match client.get_base_data() {
-        Ok(base_data) => println!("{:#?}", base_data),
-        Err(e) => println!("Error: {}", e)
-    }
-    println!("```");
-}
-
-fn print_menu(client: Client) {
-    println!("# Menu");
-    println!();
-    println!("```");
-    match client.get_menu(&"sb".to_string()) {
-        Ok(menu) => println!("{:#?}", menu),
-        Err(e) => println!("Error: {}", e)
-    }
-    println!("```");
-}
-
 
 fn main() {
     let matches = App::new("mensaar-rs")
