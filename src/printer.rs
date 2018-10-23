@@ -16,7 +16,7 @@ impl Printer {
         counter_colors.insert(String::from("vegetarisch"), Color::Blue);
         counter_colors.insert(String::from("freeflow"), Color::Yellow);
         counter_colors.insert(String::from("mensacafe"), Color::Green);
-        //counter_colors.insert(String::from("mensacafe_abends"), Color::Purple);
+        counter_colors.insert(String::from("mensacafe-abend"), Color::Magenta);
 
         Printer {
             counter_colors
